@@ -18,9 +18,7 @@ def listen_for_commands():
             recognizer.adjust_for_ambient_noise(
                 source, duration=1.5
             )  # Adjust for ambient noise
-            audio = recognizer.listen(
-                source, phrase_time_limit=5
-            )  # Limit recording to 3 seconds
+            audio = recognizer.listen(source)  # Limit recording to 3 seconds
 
         try:
             command = recognizer.recognize_google(audio)
@@ -35,6 +33,8 @@ def listen_for_commands():
                 close_browser()
             elif "tab" in recognized_command:
                 close_tab()
+            elif "type" in recognized_command:
+                type(recognized_command)
         except sr.UnknownValueError:
             print("Sorry, I couldn't understand the command.")
         except sr.RequestError as e:
@@ -56,6 +56,13 @@ def close_browser():
 def close_tab():
     print("Closing Google Chrome...")
     pyautogui.hotkey("ctrl", "w")  # Simulate pressing Alt + F4 keys
+
+
+def type(recognized_command):
+
+    words_to_type = " ".join(recognized_command.split()[1:])
+    print(words_to_type)
+    pyautogui.write(words_to_type)
 
 
 # Function to start voice command recognition in a separate thread
